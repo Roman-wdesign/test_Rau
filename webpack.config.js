@@ -27,6 +27,7 @@ module.exports = {
     plugins: [
         new MiniCssExtractPlugin(),
         new HtmlWebpackPlugin({
+            favicon: './src/favicon.ico',
             title: 'webpack Boilerplate',
             template: path.resolve(__dirname, './src/template.html'), // шаблон
             filename: 'index.html', // название выходного файла
@@ -41,15 +42,21 @@ module.exports = {
                 },
             ],
         }),
-        new webpack.ProvidePlugin({
-            $ : 'jquery',
-            jQuery : 'jquery',
-            'window.jQuery' : 'jquery'
 
-        })
     ],
     module: {
         rules: [
+            {
+                test: /\.s[ac]ss$/i,
+                use: [
+                    // Creates `style` nodes from JS strings
+                    "style-loader",
+                    // Translates CSS into CommonJS
+                    "css-loader",
+                    // Compiles Sass to CSS
+                    "sass-loader",
+                ],
+            },
             {
                 test: /\.m?js$/,
                 exclude: /node_modules/,
@@ -68,7 +75,8 @@ module.exports = {
             },
             {
                 test: /\.css$/i,
-                use: [MiniCssExtractPlugin.loader, 'css-loader'],
+                use: ['style-loader',
+                    MiniCssExtractPlugin.loader,],
             },
             {
                 test: /\.(woff(2)?|eot|ttf|otf|svg|)$/,
